@@ -1,7 +1,7 @@
 {
 
   "variables": {
-    "template": "centos7.3-puppet5",
+    "template": "centos7.3",
     "access_token": "{{env `VAGRANT_CLOUD_TOKEN`}}"
   },
 
@@ -43,8 +43,8 @@
         "type": "vagrant-cloud",
         "box_tag": "viniciusxavierbove/{{user `template`}}",
         "access_token": "{{user `access_token`}}",
-        "version": "1.0.1",
-        "version_description": "CentOS 7.3.1611 with Puppet Agent 5.0.1 - Update version VBoxGuestAdditions"
+        "version": "1.0.0",
+        "version_description": "CentOS 7.3.1611"
       }
     ]
   ],
@@ -61,7 +61,6 @@
         "scripts/centos/networking.sh",
         "scripts/common/vagrant.sh",
         "scripts/common/virtualbox.sh",
-        "scripts/centos/puppet-agent5.sh",
         "scripts/centos/cleanup.sh",
         "scripts/common/minimize.sh"
       ]

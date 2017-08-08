@@ -3,3 +3,4 @@ packer_cache
 .DS_Store
 packer*
 output*
+debian9.1-puppet5.json
