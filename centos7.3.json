@@ -20,10 +20,10 @@
       "iso_url": "http://www.linorg.usp.br/CentOS/7.3.1611/isos/x86_64/CentOS-7-x86_64-DVD-1611.iso",
       "ssh_password": "vagrant",
       "ssh_username": "vagrant",
-      "ssh_wait_timeout": "20m",
+      "ssh_wait_timeout": "40m",
       "shutdown_command": "echo 'vagrant' | sudo -S /sbin/halt -h -p",
       "vboxmanage": [
-        ["modifyvm", "{{.Name}}", "--memory", "512"],
+        ["modifyvm", "{{.Name}}", "--memory", "1024"],
         ["modifyvm", "{{.Name}}", "--cpus", "1"]
       ],
       "boot_command": [
@@ -31,7 +31,7 @@
       ]
     }
   ],
-   
+
   "post-processors": [
     [
       {
@@ -41,10 +41,10 @@
       },
       {
         "type": "vagrant-cloud",
-        "box_tag": "viniciusxavierbove/{{user `template`}}",
+        "box_tag": "viniciusxavier/{{user `template`}}",
         "access_token": "{{user `access_token`}}",
-        "version": "1.0.0",
-        "version_description": "CentOS 7.3.1611"
+        "version": "1.0.1",
+        "version_description": "CentOS 7.3.1611 - Update version VBoxGuestAdditions 5.1.28"
       }
     ]
   ],

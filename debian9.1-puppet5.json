@@ -1,0 +1,89 @@
+{
+
+  "variables": {
+    "template": "debian9.1-puppet5",
+    "access_token": "{{env `VAGRANT_CLOUD_TOKEN`}}"
+  },
+
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "Debian_64",
+      "disk_size": "8192",
+      "hard_drive_interface": "sata",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "headless": "false",
+      "http_directory": "http",
+      "output_directory": "packer-{{user `template`}}",
+      "iso_checksum": "c9e070074de83aa22e141f59a423e5210a5019b369ef1efe61a2afd44ba8f371",
+      "iso_checksum_type": "sha256",
+      "iso_url": "http://www.linorg.usp.br/cdimage/release/9.1.0/amd64/iso-cd/debian-9.1.0-amd64-netinst.iso",
+      "ssh_password": "vagrant",
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/shutdown -hP now",
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "1024"],
+        ["modifyvm", "{{.Name}}", "--cpus", "1"]
+      ],
+      "boot_command": [
+        "<esc><wait>",
+        "install <wait>",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian/preseed.cfg <wait>",
+        "debian-installer=en_US.UTF-8 <wait>",
+        "auto <wait>",
+        "locale=en_US.UTF-8 <wait>",
+        "kbd-chooser/method=us <wait>",
+        "keyboard-configuration/xkb-keymap=us <wait>",
+        "netcfg/get_hostname={{ .Name }} <wait>",
+        "netcfg/get_domain=vagrantup.com <wait>",
+        "fb=false <wait>",
+        "debconf/frontend=noninteractive <wait>",
+        "console-setup/ask_detect=false <wait>",
+        "console-keymaps-at/keymap=us <wait>",
+        "grub-installer/bootdev=/dev/sda <wait>",
+        "<enter><wait>"
+      ]
+    }
+  ],
+
+  "post-processors": [
+    [
+      {
+        "type": "vagrant",
+        "output": "builds/{{user `template`}}.box",
+        "keep_input_artifact": false
+      },
+      {
+        "type": "vagrant-cloud",
+        "box_tag": "viniciusxavier/{{user `template`}}",
+        "access_token": "{{user `access_token`}}",
+        "version": "1.0.0",
+        "version_description": "Debian 9.1 with Puppet Agent latest version"
+      }
+    ]
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "environment_vars": [
+        "HOME_DIR=/home/vagrant"
+      ],
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "scripts": [
+        "scripts/debian/update.sh",
+        "scripts/common/sshd.sh",
+        "scripts/debian/networking.sh",
+        "scripts/debian/sudoers.sh",
+        "scripts/common/vagrant.sh",
+        "scripts/debian/systemd.sh",
+        "scripts/common/virtualbox.sh",
+        "scripts/debian/puppet-agent5.sh",
+        "scripts/debian/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ]
+    }
+  ]
+
+}

@@ -1,7 +1,7 @@
 {
 
   "variables": {
-    "template": "ubuntu16.04.3",
+    "template": "ubuntu16.04.3-puppet5",
     "access_token": "{{env `VAGRANT_CLOUD_TOKEN`}}"
   },
 
@@ -60,7 +60,7 @@
         "box_tag": "viniciusxavier/{{user `template`}}",
         "access_token": "{{user `access_token`}}",
         "version": "1.0.0",
-        "version_description": "Ubuntu 16.04.3 only"
+        "version_description": "Ubuntu 16.04.3 with Puppet Agent 5.2.0"
       }
     ]
   ],
@@ -73,6 +73,7 @@
         "scripts/ubuntu/virtualbox.sh",
         "scripts/common/vagrant.sh",
         "scripts/ubuntu/sshd.sh",
+        "scripts/ubuntu/puppet-agent5.sh",
         "scripts/ubuntu/cleanup.sh",
         "scripts/ubuntu/minimize.sh"
       ]
